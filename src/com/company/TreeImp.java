@@ -64,8 +64,77 @@ public class TreeImp implements Tree {
     }
 
     @Override
-    public Number delete(Number value) {
-        return null;
+    public boolean delete(Number value) {
+//            if root Node is == null return -1
+        if (rootNode == null) {
+            return false;
+
+        } else if (rootNode != null) {
+            return deleteNode(rootNode, value);
+        }
+
+
+        return false;
+    }
+
+    private boolean deleteNode(Node node, Number value) {
+        if (node.value == value) {
+//             delete the node
+//             if the node have no children
+            if (node.right == null && node.left == null) {
+                if (node.parent.right.value.floatValue() == value.floatValue()) {
+                    node.parent.right = null;
+                } else {
+                    node.parent.left = null;
+                }
+                return true;
+            } else if (node.right == null && node.left != null) {
+                node.parent.right = node.left;
+                return true;
+            } else if (node.right != null) {
+                Node min = findMinNode(node.right);
+                System.out.println("++++++++++++++++++++"+min.value);
+                min.parent = node.parent;
+
+                if (node.parent == null) {
+                    this.rootNode = min;
+                            return true;
+                } else if (node.parent.left.value.floatValue() == node.value.floatValue()) {
+                    node.parent.left = min;
+
+                } else {
+                    node.parent.right = min;
+                }
+
+                return true;
+            }
+
+
+        } else if (value.floatValue() > node.value.floatValue()) {
+//             go to the right
+            if (node.right != null)
+                return deleteNode(node.right, value);
+            else
+                return false;
+        } else if (value.floatValue() < node.value.floatValue()) {
+            if (node.left != null)
+                return deleteNode(node.left, value);
+            else
+                return false;
+
+
+        }
+
+        return false;
+    }
+
+    private Node findMinNode(Node node) {
+        if (node.left == null) {
+            return node;
+        } else
+            return findMinNode(node.left);
+
+
     }
 
     @Override
@@ -92,20 +161,19 @@ public class TreeImp implements Tree {
     @Override
     public Number max() {
 
-if (this.rootNode == null){
-    return null;
-}else {
-    return findMax(rootNode);
-}
+        if (this.rootNode == null) {
+            return null;
+        } else {
+            return findMax(rootNode);
+        }
 
     }
 
     private Number findMax(Node node) {
 
-        if (node.right != null){
+        if (node.right != null) {
             return findMax(node.right);
-        }
-        else
+        } else
             return node.value;
 
     }

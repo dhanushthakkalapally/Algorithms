@@ -8,7 +8,7 @@ public interface Tree<T extends Number> {
  * */
     public boolean insert(T value);
 
-    public T delete(T value);
+    public boolean delete(T value);
 
     public T min();
 
